@@ -1,0 +1,5 @@
+
+
+global proc test(string $test){
+	print $test;
+}

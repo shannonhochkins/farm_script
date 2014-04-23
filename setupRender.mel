@@ -1,0 +1,45 @@
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////                                                                                                ////////////
+//////////                   EDIT THE VARIABLES BELOW TO CUSTOMISE THE RENDER COMMAND                     ////////////
+//////////                                                                                                //////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+$startFrame 			  = 173;
+$endFrame 				  = 173;
+$xResolution			  = 22701;
+$yResolution			  = 1920;
+$renderDirectory 		  = "/Volumes/raid/Current Clients/Harte-Hanks/3D/Logo/scenes/images/new_york/";
+$sceneFilePath			  = "/Volumes/raid/Current Clients/Harte-Hanks/3D/Logo/scenes/renderable/corporate_hold_screen_new_york.mb";
+$renderLayer              = "";
+$camera					  = "";
+$additionalFlags 		  = "";
+
+
+
+$useLogFile               = true;
+$useMentalRay			  = true;
+$interperateFilename      = true;
+$displayHelp			  = false;
+$verbosityLevel 		  = 0;
+$renderThreads 			  = 8;
+$memoryLimit 			  = 10000;
+$framePadding             = 4;
+$incrementFramesBy        = 1;
+
+
+
+
+
+source "/Volumes/raid/farm_script/_apps/_scripts/post_render_source.mel";
+
+
+
+
+
+
+

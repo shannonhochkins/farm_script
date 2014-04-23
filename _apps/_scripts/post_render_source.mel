@@ -1,0 +1,77 @@
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////                                                                                                //////////// 
+//////////                   Print out info for the user in the terminal window                           ////////////
+//////////                                                                                                //////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+source "/Volumes/raid/farm_script/_apps/_scripts/preRenderInfo.mel";
+
+global proc string getIP(){
+	$ip = `system("ifconfig | grep \"inet \" | grep -v 127.0.0.1")`;
+	string $splitIp = substituteAllString($ip, "inet ", "");
+	string $ipArr[];
+	$splitIp = `tokenize $splitIp " " $ipArr`;
+	string $newIp = substituteAllString($ipArr[0], "\t", "");	
+	return $newIp;
+}
+
+string $preRenderStatistics 	= "source \"/Volumes/raid/farm_script/_apps/_scripts/procedures.mel\";  preRenderCommand(" + $startFrame + ",\"" + $camera + "\");";
+string $preFrameStatistics  	= "preFrameCommand(" + $startFrame + "," + $endFrame + "," + $startFrame + ",\"" + $sceneFilePath + "\",\"" +  $renderDirectory + "\",\"" + $camera + "\");";
+string $postFrameStatistics 	= "postFrameCommand();";
+string $postRenderStatistics 	= "postRenderCommand(\"" + $renderDirectory + "\");";
+
+
+if ($displayHelp == true) {
+	// For an odd reason, using the flag -help, displays less attributes than miss typing a flag....
+	system("Render -");
+} else {
+
+	// If a render layer isn't set, don't include the flag	
+	$renderLayer = ($renderLayer != "" ? $renderLayer = " -rl " + $renderLayer : $renderLayer);
+	// If a camera isn't specified, use the default.
+	$camera = ($camera != "" ? $camera = " -cam " + $camera : $camera);
+	
+	// Only include these flags if mental ray is set to true.
+	string $mr = ($useMentalRay == "true" || $useMentalRay == true ? " -mr:v " + $verbosityLevel + " -mr:rt " + $renderThreads + " -mr:mem " + $memoryLimit : "");
+
+	// Output the logs to file, this allows us to get much more data for the user interface, 
+	// disabling useLogFile will make some features not work.
+
+	string $logFile = "";
+	if ($useLogFile == true || $useLogFile == "true") {
+		$ip = getIP();
+		$path = "/Volumes/raid/farm_script/logs/" + $ip + ".txt";		
+		$fileId = `fopen $path "w"`;
+		fprint $fileId ("");
+		fclose $fileId ; 
+
+		$logFile = " -log \"" + $path + "\" ";
+		print("Rendering logs to: " + $path);
+	}
+
+	// Rather than the scene setting the file names, we'll create a standard output here using the filename and render layers.	
+	// This will allow us to follow a standard, so we can check for missing frames, files and more.
+	// Options are <Extension> <Scene> <RenderLayer> <Camera> <RenderPassFileGroup> <RenderPass> <RenderPassType> <Version>
+	string $imageName = "";
+	if ($interperateFilename == "true" || $interperateFilename == true) {		
+		$imageName = " -im \"<RenderLayer>_<Scene>_<RenderPass>\" ";
+	}
+
+	string $fileFormatting = " -fnc 3 ";
+	string $framePaddingString = " -pad " + $framePadding + " ";
+	string $incrementBy = " -b " + $incrementFramesBy + " ";
+	
+
+
+	string $renderCommand = "Render -preRender '" + $preRenderStatistics + "' -preFrame '" + $preFrameStatistics + "' -postFrame '" + $postFrameStatistics + "' -postRender '" + $postRenderStatistics + "'" + $logFile + " -x " + $xResolution + " -y " + $yResolution + $renderLayer + $framePaddingString + $incrementBy + $imageName + $fileFormatting +  $camera + $mr + " -s " + $startFrame + " -e " + $endFrame + " -rd \"" + $renderDirectory + "\" " + $additionalFlags + " \"" + $sceneFilePath + "\"";
+	print($renderCommand);
+	if ($startFrame > $endFrame) {
+		print("Start frame shouldn't be higher than your end frame, please fix.");
+	} else {
+		system($renderCommand);
+	}
+	
+}

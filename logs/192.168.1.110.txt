@@ -1,0 +1,72 @@
+
+Starting "/Applications/Autodesk/maya2014/Maya.app/Contents/bin/maya"
+
+mental ray for Maya 2014 
+// Mental ray for Maya: using startup file /Applications/Autodesk/mentalrayForMaya2014//maya.rayrc.
+mental ray for Maya: setup
+mental ray for Maya: initialize
+mental ray: version 3.11.1.13, Sep 12 2013, revision 204885
+mental ray for Maya: register extensions
+// mental ray Node Factory: loaded
+mental ray for Maya: successfully registered
+mental ray for Maya: loading startup file: /Applications/Autodesk/mentalrayForMaya2014//maya.rayrc
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/abcimport.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/abcimport.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/AdskShaderSDKWrappers.mi
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/architectural.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/architectural.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/base.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/base.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/builtin_bsdf.mi
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/contour.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/contour.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/paint.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/paint.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/physics.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/physics.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/production.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/production.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/ptex.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/ptex.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/subsurface.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/subsurface.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/surfaceSampler.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/surfaceSampler.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/userdata.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/userdata.dylib
+// generating Maya nodes...
+// parsing /Applications/Autodesk/mentalrayForMaya2014/shaders/include/useribl.mi
+// loading /Applications/Autodesk/mentalrayForMaya2014/shaders/useribl.dylib
+// generating Maya nodes...
+File read in 1 seconds.
+Result: /Volumes/raid/Current Clients/Harte-Hanks/3D/Logo/scenes/renderable/corporate_hold_screen_new_york.mb
+
+
+    _      _____ __  __ ________          ______  _____  _  __ _____ 
+   | |    |_   _|  \/  |  ____\ \        / / __ \|  __ \| |/ / _____|
+   | |      | | | \  / | |__   \ \  /\  / / |  | | |__) | ' /| (___  
+   | |      | | | |\/| |  __|   \ \/  \/ /| |  | |  _  /|  <  \___ \ 
+   | |____ _| |_| |  | | |____   \  /\  / | |__| | | \ \| . \ ____) |
+   |______|_____|_|  |_|______|   \/  \/   \____/|_|  \_\_|\_\_____/ 
+
+
+Rendering Frame: 58 of 58 Apr 23 - 07:58:11am  - Completed Frame at: Apr 23 - 11:51:15am - 3 hours, 53 minutes and 4 seconds
+ - Took: 1 hours, 51 minutes and 15 seconds
+
+Images were rendered to: /Volumes/raid/Current Clients/Harte-Hanks/3D/Logo/scenes/images/new_york/
+
+Render complete, you can run the function printRenderInfo(); to find out information about this render.
+
+Scene /Volumes/raid/Current Clients/Harte-Hanks/3D/Logo/scenes/renderable/corporate_hold_screen_new_york.mb completed.

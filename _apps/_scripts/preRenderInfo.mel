@@ -1,0 +1,20 @@
+
+
+
+
+string $commandSplitter = "\n============================================================\n\n";
+print($commandSplitter); 
+print ("\n=== LIMEWORKS FARM OUTPUT ===\n\n");
+print ("Start Frame: " + $startFrame + "\n"); 	
+print ("End Frame: " + $endFrame + "\n"); 
+print ("Camera: " + $camera + "\n"); 
+print ("Render Layer: " + $renderLayer + "\n"); 
+print ("Render Directory: " + $renderDirectory + "\n");
+print ("Project File Path: " + $sceneFilePath + "\n");
+print ("X Resolution: " + $xResolution + "\n"); 
+print ("Y Resolution: " + $yResolution + "\n"); 
+print ("\n=== SYSTEM RELATED ===\n\n");
+print ("Verbosity: " + $verbosityLevel + "\n"); 
+print ("Render Threads: " + $renderThreads + "\n"); 
+print ("Memory Limit: " + $memoryLimit + "\n"); 
+print($commandSplitter);

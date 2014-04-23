@@ -1,0 +1,251 @@
+
+
+global string $checkedFrames = "false";
+global int $startedCheckingAt = 0;
+global int $startTime;
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////                                                                                                //////////// 
+//////////                  Get the current time as we start and finish a frame                           ////////////
+//////////                                                                                                //////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+global proc string getTime() {	
+	string $dateTime = `system("date '+%b %d - %I:%M:%S%p'")`;
+	string $dateString = "";
+	$dateString = match( "^[^(\r\n)]*", $dateTime );
+	return $dateString;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////                                                                                                //////////// 
+//////////                  Get the Elapsed time between start and end of renders                         ////////////
+//////////                                                                                                //////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+global proc string getElapsedTime(int $s, int $e) {	
+    int $seconds = $e - $s;
+    string $renderTime = "";
+    $renderTime = `sec_to_time($seconds)`;
+	return($renderTime);
+}
+
+global proc string sec_to_time(int $s) {
+    int $sec = $s;
+
+    $days = $sec / 86400;
+    $sec -= 86400*$days;
+
+    $hrs = $sec / 3600;
+    $sec -= 3600*$hrs;
+
+    $mins = $sec / 60;
+    $sec -= (60*$mins);
+    return ($hrs +  " hours, " + $mins +  " minutes and " +  $sec + " seconds");
+}
+
+global proc string getIP(){
+	$ip = `system("ifconfig | grep \"inet \" | grep -v 127.0.0.1")`;
+	string $splitIp = substituteAllString($ip, "inet ", "");
+	string $ipArr[];
+	$splitIp = `tokenize $splitIp " " $ipArr`;
+	string $newIp = substituteAllString($ipArr[0], "\t", "");		
+	return $newIp;
+}
+
+
+global string $globalIp;
+$globalIp = getIP();
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////                                                                                                //////////// 
+//////////                  		Get the current time as a unix timestamp                              ////////////
+//////////                                                                                                //////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+global proc int getUnixTimestamp() {
+	int $time = 0;
+	$time = `system("date +%s")`;
+	return $time;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////                                                                                                //////////// 
+//////////                  		Post, pre callback functions			                              ////////////
+//////////                                                                                                //////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+global int $renderStartTime;
+global proc preRenderCommand(int $s, string $camera) {
+	global int $renderStartTime;
+	$renderStartTime = getUnixTimestamp();
+	string $s1 = "\n\n    _      _____ __  __ ________          ______  _____  _  __ _____ \n";
+	string $s2 = "   | |    |_   _|  \\/  |  ____\\ \\        / / __ \\|  __ \\| |/ / _____|\n";
+	string $s3 = "   | |      | | | \\  / | |__   \\ \\  /\\  / / |  | | |__) | ' /| (___  \n";
+	string $s4 = "   | |      | | | |\\/| |  __|   \\ \\/  \\/ /| |  | |  _  /|  <  \\___ \\ \n";
+	string $s5 = "   | |____ _| |_| |  | | |____   \\  /\\  / | |__| | | \\ \\| . \\ ____) |\n";
+	string $s6 = "   |______|_____|_|  |_|______|   \\/  \\/   \\____/|_|  \\_\\_|\\_\\_____/ \n\n\n";	
+	print ($s1 + $s2 + $s3 + $s4 + $s5 + $s6);
+
+	
+	
+	global string $globalIp;
+	
+	string $filePath = "/Volumes/raid/farm_script/nodes_status/" + $globalIp + ".txt";
+	$fileId = `fopen $filePath "w"`; 
+	fprint $fileId ("{ip: \"" + $globalIp + "\",status: \"starting\",camera: \"" + $camera + "\",startTime: \"" + getUnixTimestamp() + "\"}");  
+	fclose $fileId ;  	
+	permissionChanges();
+}
+
+
+
+//global int $startTime;
+// global string $imagePath;
+// global string $scenePath;
+
+global string $preFrameInitiated;
+global int $currentFrame;
+$preFrameInitiated = false;
+
+
+global proc preFrameCommand(int $s, int $e, int $notinuse, string $scenePath, string $imagePath, string $camera) {
+
+	global string $checkedFrames;
+	global int $currentFrame;
+	global string $preFrameInitiated;
+	global int $startedCheckingAt;
+	global int $startTime;
+	global int $frameCount;		
+	global string $globalIp;
+	global string $globalImagePath;
+	global string $globalScenePath;
+
+	
+	global int $startFrame;
+	global int $endFrame;
+	if ($preFrameInitiated == false) {
+		$currentFrame = $s;
+	} else {
+		$currentFrame++;
+	}
+	
+	$startFrame = $s;
+	$endFrame = $e;	
+
+	$globalImagePath = $imagePath;
+	$globalScenePath = $scenePath;
+	$startTime = getUnixTimestamp();
+
+	$preFrameInitiated = true;
+
+	
+	
+    if ($currentFrame <= $e) {
+    	
+    	
+    	
+    	print("Rendering Frame: " + ($currentFrame) + " of " + $e + " " + getTime() + " ");    	
+    	
+    	$arr = "{";
+	    	$arr += "ip: \"" + $globalIp + "\",";
+	    	$arr += "startFrame: \"" + $s + "\",";
+	    	$arr += "endFrame: \"" + $e  + "\",";
+	    	$arr += "startedCurrentFrameAt: \"" + $startTime  + "\",";
+	    	$arr += "status: \"rendering\",";
+	    	$arr += "currentFrame: \"" + $currentFrame + "\",";
+	    	$arr += "scenePath: \"" + $globalScenePath + "\",";
+	    	$arr += "camera: \"" + $camera + "\",";
+	    	$arr += "imagePath: \"" + $globalImagePath + "\"";
+    	$arr += "}";
+
+
+    	// Define Your File Path  
+		string $filePath = "/Volumes/raid/farm_script/nodes_status/" + $globalIp + ".txt";
+		$fileId = `fopen $filePath "w"`; 
+		fprint $fileId ($arr);  
+		fclose $fileId ;
+		permissionChanges();
+
+    	//system("echo \"" + $arr + "\" > \"/Volumes/raid/farm_script/nodes_status/\"" + $ip + ".txt\"");
+	    //print($ip);
+    } else {    	
+	    if ($checkedFrames != "true") {
+	    	$checkedFrames = "true";
+	    	$startedCheckingAt = getUnixTimestamp();
+	    	print("\n\nChecking Render Frames - " + getTime() + " ");
+	    } else {
+	    	// Build Progress Bar ?
+
+	    	
+	    }
+   	}	
+}
+global proc postFrameCommand() {
+	global string $checkedFrames;	
+	global int $startTime;	
+	if ($checkedFrames != "true") {		
+		print(" - Completed Frame at: " + getTime() + " - " + getElapsedTime($startTime, getUnixTimestamp()) + "\n");             
+	}
+}
+
+global int $renderFinishTime;
+global proc postRenderCommand(string $rd) {
+	global string $preFrameInitiated;
+	global int $startedCheckingAt;
+	global string $globalIp;
+	global int $startTime;
+	global string $globalImagePath;
+	global string $globalScenePath;	
+	
+	global int $renderStartTime;
+	global int $renderFinishTime;
+	global int $startFrame;
+	global int $endFrame;	
+	$renderFinishTime = getUnixTimestamp();
+
+	
+	
+	$arr = "{";
+    	$arr += "ip: \"" + $globalIp + "\",";
+    	$arr += "startFrame: \"" + $startFrame + "\",";
+    	$arr += "endFrame: \"" + $endFrame  + "\",";
+    	$arr += "startedCurrentFrameAt: \"" + $startTime  + "\",";
+    	$arr += "renderStartTime: \"" + $renderStartTime + "\","; 
+    	$arr += "renderFinishTime: \"" + $renderFinishTime + "\","; 
+    	$arr += "status: \"completed\",";
+    	$arr += "currentFrame: \"" + $endFrame + "\",";
+    	$arr += "scenePath: \"" + $globalScenePath + "\",";
+    	$arr += "imagePath: \"" + $globalImagePath + "\"";
+	$arr += "}";
+
+	
+	string $filePath = "/Volumes/raid/farm_script/nodes_status/" + $globalIp + ".txt";
+	$fileId = `fopen $filePath "w"`; 	
+	fprint $fileId ($arr);  
+	fclose $fileId ;  
+	if ($preFrameInitiated == false) {
+		string $filePath = "/Volumes/raid/farm_script/logs/" + $globalIp + ".txt";
+		$fileId = `fopen $filePath "a"`; 	
+		fprint $fileId ("Failed Before Start Frame.");  
+		fclose $fileId ;  
+	}
+	permissionChanges();
+	print(" - Took: " + getElapsedTime($startedCheckingAt, getUnixTimestamp()) + "\n\n");
+	print("Images were rendered to: " + $rd + "\n\n");
+	print ("Render complete, you can run the function printRenderInfo(); to find out information about this render.\n\n");
+}
+
+global proc permissionChanges(){
+	system("chmod -R 777 /Volumes/raid/farm_script/nodes_status/");
+}
+
+

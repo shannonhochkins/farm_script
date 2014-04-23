@@ -1,0 +1,19 @@
+global int $frameCount;			
+global int $startTime;			
+global int $startFrame;			
+global int $endFrame;			
+global int $xResolution;		
+global int $yResolution;		
+global string $camera;			
+global string $renderLayer;		
+global string $renderDirectory;	
+global string $sceneFilePath;	
+global int $verbosityLevel;		
+global int $renderThreads;		
+global int $memoryLimit;		
+global string $additionalFlags ;
+global string $interperateFilename;
+global int $framePadding;
+global int $incrementFramesBy;
+
+source "/Volumes/raid/farm_script/setupRender.mel";
